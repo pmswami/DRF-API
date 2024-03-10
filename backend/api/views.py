@@ -41,11 +41,25 @@ from rest_framework.decorators import api_view
 
 from products.serializers import ProductSerializer
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def api_home(request, *args, **kwargs):
     """DRF API View"""
-    instance = Product.objects.all().order_by("?").first()
-    data = {}
-    if instance:
-        data = ProductSerializer(instance).data
-    return Response(data)
+    if(request.method=="GET"):
+        instance = Product.objects.all().order_by("?").first()
+        data = {}
+        if instance:
+            data = ProductSerializer(instance).data
+        return Response(data)
+    elif(request.method=="POST"):
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # data = serializer.data
+            # print(serializer.data)
+            instance = serializer.save()
+            print(instance)
+            return Response(serializer.data)
+            # try:
+            #     product = Product.objects.create(data)
+            #     return Response(product)
+            # except Exception as e:
+            #     return Response({"error": e})
