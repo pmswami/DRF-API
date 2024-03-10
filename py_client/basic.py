@@ -1,7 +1,9 @@
 import requests
 
 # endpoint = f"https://httpbin.org/"
-endpoint = f"https://httpbin.org/anything"
+# endpoint = f"https://httpbin.org/anything"
+endpoint = "http://127.0.0.1:8000/"
+
 # response = requests.get(endpoint, json={"msg":"Hello Wolrd"})
 response = requests.get(endpoint, data={"msg":"Hello World"})
 # print(response.text)
