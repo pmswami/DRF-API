@@ -1,0 +1,5 @@
+HttpResponse => accepts a string
+JsonResponse => accepts a json data
+model_to_dict => Function which converts model data into Python dictionary
+serializer.SerializerMethodField => Used to define in-place serializer variable. If separate function is needed to calculate a field the use "get_" prefix to function name in order to work.
+@property decorator in model is used to calculate model field using a function.
