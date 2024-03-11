@@ -17,4 +17,7 @@ Serializers and Views are very much important in DRF
 
 perform_create() method in generics.CreateAPIView is used to perform custom operation before creation of the object in database
 
-//1:41:00
+https://www.django-rest-framework.org/api-guide/permissions/#custom-permissions
+
+https://www.django-rest-framework.org/api-guide/permissions/
+

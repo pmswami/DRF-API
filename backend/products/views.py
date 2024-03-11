@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 # from django.http import Http404
+from .permissions import IsStaffEditorPermission
 
 from .models import Product
 from .serializers import ProductSerializer
@@ -12,7 +13,8 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     authentication_classes = [authentication.SessionAuthentication]
     # permission_classes = [permissions.IsAuthenticated]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission] # Order of permissions check is important
 
     def perform_create(self, serializer):
         print(serializer.validated_data)
@@ -26,13 +28,19 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup_field = "pk"
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.DjangoModelPermissions]
 
 class ProductUpdateAPIView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.DjangoModelPermissions]
 
     def perform_update(self, serializer):
         instance = serializer.save()
@@ -43,7 +51,10 @@ class ProductDeleteAPIView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.DjangoModelPermissions]
 
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
