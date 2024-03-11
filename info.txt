@@ -26,5 +26,6 @@ If permissions_classes are defined in settings.py then there is no need to defin
 
 For throttling => https://www.django-rest-framework.org/api-guide/throttling/
 
+Always try to use mixins for repeated lines of codes.
 
 //2:46:00
