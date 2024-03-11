@@ -1,3 +1,5 @@
+https://github.com/codingforentrepreneurs
+
 HttpResponse => accepts a string
 
 JsonResponse => accepts a json data
@@ -15,3 +17,4 @@ Serializers and Views are very much important in DRF
 
 perform_create() method in generics.CreateAPIView is used to perform custom operation before creation of the object in database
 
+//1:41:00
