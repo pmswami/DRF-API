@@ -1,32 +1,62 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from api.serializers import UserPublicSerializer
 from .models import Product
 from .validators import validate_title, validate_title_no_hello, unique_product_title
 
+class ProductInlineSerializer(serializers.Serializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name="product-detail",
+        lookup_field="pk",
+        read_only=True
+    )
+    title=serializers.CharField(read_only=True)
+
 class ProductSerializer(serializers.ModelSerializer):
+
+    # related_products = ProductInlineSerializer(source = "user.product_set.all", read_only=True, many=True)
     discount = serializers.SerializerMethodField(read_only=True)
     # url = serializers.SerializerMethodField(read_only=True)
-    # url = serializers.HyperlinkedIdentityField(
-    #     view_name="product-detail",
-    #     lookup_field = "pk"
-    # )
+    url = serializers.HyperlinkedIdentityField(
+        view_name="product-detail",
+        lookup_field = "pk",
+        read_only=True
+    )
+    edit_url = serializers.HyperlinkedIdentityField(
+        view_name="product-edit",
+        lookup_field = "pk",
+        read_only=True
+    )
     # email = serializers.EmailField(write_only=True)
     # title = serializers.CharField(validators=[validate_title])
     title = serializers.CharField(validators=[validate_title_no_hello, unique_product_title])
     # name = serializers.CharField(source="title", read_only=True)
+    # my_user_data = serializers.SerializerMethodField(read_only=True)
+    owner = UserPublicSerializer(source="user", read_only=True)
+    email = serializers.EmailField(source="user.email", read_only=True)
+
     class Meta:
         model = Product
         fields = [
             'pk',
+            "url",
+            "edit_url",
             # "name",
-            # "user",
+            "owner",
             "title",
             'price',
             "sale_price",
-            "discount"
+            "discount",
+            # "my_user_data"
+            "email",
+            "related_products"
         ]
 
+    # def get_my_user_data(self, obj):
+    #     return {
+    #         "username": obj.user.username
+    #     }
     # def get_url(self, obj):
     #     # return f"/api/products/{obj.pk}/"
     #     # return f"/api/products/{obj.id}/"
