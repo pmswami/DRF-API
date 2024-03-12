@@ -5,12 +5,16 @@ from django.shortcuts import get_object_or_404
 # from django.http import Http404
 from .permissions import IsStaffEditorPermission
 
-from api.mixins import StaffEditorPermissionMixin
+from api.mixins import (
+    StaffEditorPermissionMixin,
+    UserQuerySetMixin
+)
 from api.authentication import TokenAuthentication
 from .models import Product
 from .serializers import ProductSerializer
 
 class ProductListCreateAPIView(
+    UserQuerySetMixin,
     StaffEditorPermissionMixin,
     generics.ListCreateAPIView
     ):
@@ -32,7 +36,17 @@ class ProductListCreateAPIView(
         content = serializer.validated_data.get("content") or None
         if(content is None):
             content = title
-        serializer.save(content=content)
+        serializer.save(user=self.request.user,content=content)
+
+    # def get_queryset(self, *args, **kwargs):
+    #     queryset = super().get_queryset(*args, **kwargs)
+    #     request = self.request
+    #     print(request.user)
+    #     user=request.user
+    #     if not user.is_authenticated:
+    #         return Product.objects.none()
+    #     # return super().get_queryset(*args, **kwags)
+    #     return queryset.filter(user=request.user)
 
 class ProductDetailAPIView(
     StaffEditorPermissionMixin,
