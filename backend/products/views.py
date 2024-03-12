@@ -25,15 +25,17 @@ class ProductListCreateAPIView(
     # permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission] # Order of permissions check is important
 
     def perform_create(self, serializer):
-        print(serializer.validated_data)
+        # email = serializer.validated_data.pop("email")
+        # print(email)
+        # print(serializer.validated_data)
         title = serializer.validated_data.get("title")
         content = serializer.validated_data.get("content") or None
         if(content is None):
             content = title
-        instance = serializer.save(content=content)
+        serializer.save(content=content)
 
 class ProductDetailAPIView(
-    StaffEditorPermissionMixin
+    StaffEditorPermissionMixin,
     generics.RetrieveAPIView
     ):
     queryset = Product.objects.all()
