@@ -51,6 +51,7 @@ class ProductSerializer(serializers.ModelSerializer):
             # "my_user_data"
             "email",
             # "related_products"
+            "public"
         ]
 
     # def get_my_user_data(self, obj):
